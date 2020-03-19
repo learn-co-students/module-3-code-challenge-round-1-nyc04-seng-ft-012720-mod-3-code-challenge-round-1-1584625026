@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(json => renderImage(json))
 
 /**Event Listeners **/
-
+commentForm.addEventListener('submit',addComment)
 likeBtn.addEventListener('click', likeImage)
 /** Rendering **/
 
@@ -34,7 +34,7 @@ likeBtn.addEventListener('click', likeImage)
     commentList.innerHTML = json.comments.map((comment) => `<li>${comment.content}</li>`).join(" ")
  }
 
- //LIKE IMAGE
+ //LIKE IMAGE(Post Request)
   function likeImage(){
     fetch(likeURL, {
       method: 'POST',
@@ -48,7 +48,7 @@ likeBtn.addEventListener('click', likeImage)
     likesDiv.innerText = parseInt(likes.innerText) + 1
   }
 
-//MAKE COMMENTS
+//MAKE COMMENTS(Post Request)
 function addComment(event){
   event.preventDefault()
   fetch(commentsURL, {
