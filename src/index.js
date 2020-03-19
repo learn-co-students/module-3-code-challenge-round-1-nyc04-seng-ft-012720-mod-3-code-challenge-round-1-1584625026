@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //add listener to enable users to like and/or comment - stretch to delete comment
   commentForm.addEventListener('submit',addComment)
   likeBtn.addEventListener('click', likeImage)
+
 /** Rendering **/
 
 //IMAGE- get image from json fetch, and display on page
@@ -34,6 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
     image.dataset.id = json.id 
     commentList.innerHTML = json.comments.map((comment) => `<li>${comment.content}</li>`).join(" ")
  }
+
+ //COMMENTS
+ //Attempted to create the delete button to render next to each comment. However have been unsuccessful
+  function renderComments(comments){
+    return comments.forEach(comment => {
+      const commentLi = document.createElement('li')
+      const deleteButton = document.createElement('button')
+      commentLi.id = `comment-${comment.id}`
+      deleteButton.dataset.id = comment.id
+      deleteButton.innerText = 'DELETE'
+      deleteButton.addEventListener('click', removeComment)
+      commentLi.innerText = comment.content
+      commentLi.append(deleteButton)
+      commentList.append(commentLi)
+    })
+  }
 
  //LIKE IMAGE(Post Request)-json post request to update number of likes pass in url variable fo fetch data
   function likeImage(){
@@ -67,5 +84,20 @@ function addComment(event){
   comments.innerHTML = comments.innerHTML = `<li>${document.getElementById('comment_input').value}</li>`
   document.getElementById('comment_input').value = ""
 }
+
+//DELETE COMMENTS
+//I added this after the function below. Not really understanding
+  function deleteComment(commentId){
+    return fetch(`${commentsURL}/${commentId}`, {
+      method: 'DELETE'
+    })
+  }
+  function removeComment(event){
+    const commentId = event.target.dataset.id
+    const commentItem = document.getElementById(`comment-${commentId}`)
+
+    commentItem.hidden = true
+    return deleteComment(commentId)
+  }
 
 })
