@@ -9,12 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const commentsURL = `https://randopic.herokuapp.com/comments/`
 
-  //DOM Elements
+  //-------------DOM Elements------------//
   const imageCard = document.querySelector('#image_card')
   
-  //Event Listeners
+  //-------Document Event Listeners-------//
   document.addEventListener("submit", handleSubmit)
-
+  
+  //Handle Likes
   function handleLike() {
     const likesCount = imageCard.querySelector("#likes")
     const currentLikes = parseInt(likesCount.innerText)
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dataForLike = imageCard.childNodes[1].dataset.id
     postLike(dataForLike)
   }
-
+  //Handle Submit
   function handleSubmit(e) {
     e.preventDefault()
     const form = e.target
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     postComment(newComObj)
     form.reset()
   }
+  //---------------Renders----------------//
   //Render Image
   function renderImage(imageObj) {
     // const image = imageCard.querySelector("img")
@@ -58,12 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const commentsArr = imageObj.comments
     commentsArr.forEach(renderComment)
-    // imageCard.append(image)
   }
   //Render Comments
   function renderComment(commentObj) {
-    const commentBox = imageCard.querySelector('#comments')
-    //id,content,image_id,created_at,updated_at
+    //Create comment
     const newComment = document.createElement("li")
     newComment.dataset.id = commentObj.id
     newComment.innerText = commentObj.content
@@ -71,16 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteBtn = document.createElement("button")
     deleteBtn.id = "delete_button"
     deleteBtn.innerText = "X"
-    
+
     newComment.append(deleteBtn)
+    //Append Comment
+    const commentBox = imageCard.querySelector('#comments')
     commentBox.append(newComment)
-    
+    //Handle Delete
     deleteBtn.addEventListener("click", (e) => {
       deleteComment(commentObj)
       newComment.remove()
     })
   }
-
+  //----------------Fetches-----------------//
   //Get Image
   function fetchImage() {
     return fetch(imageURL)
@@ -122,6 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(console.log)
   }
 
-  //Initialize and render
+  //---------Initialize and render--------//
   fetchImage().then(renderImage)
 })
