@@ -21,11 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(json => renderImage(json))
 
 /**Event Listeners **/
-commentForm.addEventListener('submit',addComment)
-likeBtn.addEventListener('click', likeImage)
+  //add listener to enable users to like and/or comment - stretch to delete comment
+  commentForm.addEventListener('submit',addComment)
+  likeBtn.addEventListener('click', likeImage)
 /** Rendering **/
 
-//IMAGE
+//IMAGE- get image from json fetch, and display on page
   function renderImage(json){
     image.src = json.url 
     nameDiv.innerText = json.name 
@@ -34,7 +35,7 @@ likeBtn.addEventListener('click', likeImage)
     commentList.innerHTML = json.comments.map((comment) => `<li>${comment.content}</li>`).join(" ")
  }
 
- //LIKE IMAGE(Post Request)
+ //LIKE IMAGE(Post Request)-json post request to update number of likes pass in url variable fo fetch data
   function likeImage(){
     fetch(likeURL, {
       method: 'POST',
@@ -48,7 +49,7 @@ likeBtn.addEventListener('click', likeImage)
     likesDiv.innerText = parseInt(likes.innerText) + 1
   }
 
-//MAKE COMMENTS(Post Request)
+//MAKE COMMENTS(Post Request)- allow user to add as many comments as they would like-stretch delete button or create delete function??
 function addComment(event){
   event.preventDefault()
   fetch(commentsURL, {
