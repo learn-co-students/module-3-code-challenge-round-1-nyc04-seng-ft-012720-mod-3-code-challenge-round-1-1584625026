@@ -54,11 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
       image_id: imageId
     }
     renderOneComment(newComment)
-    // fetch(imageURL, {
-    //   method: `POST`,
-    //   headers: 
+    fetch(commentsURL, {
+      method: `POST`,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newComment)
 
-    // })
+    })
 
 
     // WORKING ON COMMENTS AT TIME OF FIRST COMMIT
