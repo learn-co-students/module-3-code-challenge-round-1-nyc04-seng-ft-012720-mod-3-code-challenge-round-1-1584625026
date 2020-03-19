@@ -12,22 +12,17 @@
   //DOM Elements
   const imageCard = document.querySelector('#image_card')
   
-  let i = 0
+
 
   //Event Listeners
 
 
   function handleLike() {
-    i += 1
     const likesCount = imageCard.querySelector("#likes")
-    likesCount.innerText = `Likes: ${i}`
-    // fetchImage().then(data => {
-    //   likesCount.innerText = `${data.likes_count}`
-    // })
-    newLikeObj = {
-      
-    }
-    postLike()
+    const currentLikes = parseInt(likesCount.innerText)
+    likesCount.innerText = currentLikes + 1
+    dataForLike = imageCard.childNodes[1].dataset.id
+    postLike(dataForLike)
   }
 
   //Render Image
@@ -37,7 +32,7 @@
     <img src="${imageObj.url}" id="image" data-id="${imageObj.id}"/>
     <h4 id="name">${imageObj.name}</h4>
     <span>Likes:
-      <span id="likes">${imageObj.likes_count}</span>
+      <span id="likes">${imageObj.like_count}</span>
     </span>
     <button id="like_button">Like</button>
     <form id="comment_form">
@@ -73,10 +68,10 @@
     fetch(`https://randopic.herokuapp.com/likes/`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify()
+      body: JSON.stringify({image_id: (data)})
     })
   }
 
