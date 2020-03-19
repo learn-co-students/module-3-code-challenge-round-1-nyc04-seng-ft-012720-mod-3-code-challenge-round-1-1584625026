@@ -27,38 +27,68 @@ const renderImage = (image) => {
       <input type="submit" value="Submit"/>
     </form>
     <ul id="comments">
-         <!-- <li> for each comment goes here -->
-         <li>${image.comments[0].content}</li>
     </ul>
     `
-    // Step 2 - Like Feature (Frontend)
-    document.getElementById("like_button").addEventListener("click", renderLike)
-    // Step 4 - Comment Feature (Frontend)
-    document.getElementById("comment_form").addEventListener("submit", renderForm)
+    image.comments.forEach(renderImageComment)
+
+    // EVENT LISTENERS
+    document.getElementById("like_button").addEventListener("click", () => {
+        renderLike(image)
+    })
+    document.getElementById("comment_form").addEventListener("submit", event => {
+        renderCommentForm(event, image)
+    })
 }
 
-// Step 3 - Like Feature (Backend)
-const renderLike = (event) => {
+
+// RENDER HELPERS
+// displays comments when loading page
+const renderImageComment = (commentData) => {
+    const commentsUl = document.getElementById("comments")
+    const newCommentLi = document.createElement("li")
+    newCommentLi.innerText = commentData.content
+    commentsUl.append(newCommentLi)
+}
+
+const renderLike = (image) => {
     const likeCount = document.getElementById("likes")    
     likeCount.innerText = parseInt(likeCount.innerText) + 1
-    
+    fetchLikes(image)
+}
+
+// renders comment form and adds comment to commentsUl
+const renderCommentForm = (event, image) => {
+    event.preventDefault()
+    const form = event.target
+    const commentsUl = document.getElementById("comments")
+    const commentLi = document.createElement("li")
+    commentLi.textContent = form["comment"].value
+    commentsUl.append(commentLi)
+    fetchComments(commentLi, image)
+    form.reset()
+}
+
+// FETCHERS
+const fetchLikes = (image) => {
     fetch(likeURL, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-            body: JSON.stringify({image_id: 4871})
+            body: JSON.stringify({image_id: image.id})
     })
     .then(response => response.json())
 }
 
-// Step 4 - Comment Feature (Frontend)
-const renderForm = (event) => {
-    event.preventDefault()
-    const commentsUl = document.getElementById("comments")
-    
-    const commentLi = document.createElement("li")
-    commentLi.textContent = event.target["comment"].value
-    
-    commentsUl.append(commentLi)
+const fetchComments = (commentLi,image) => {
+    fetch(commentsURL, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({image_id: image.id, content: commentLi.textContent})
+    })
+    .then(response => response.json())
+}
