@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       content: comContent,
       image_id: comImage
     }
-    renderComment(newComObj)
-    postComment(newComObj)
+    postComment(newComObj).then(renderComment)
     form.reset()
   }
   //---------------Renders----------------//
@@ -101,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   //Post Comment
   function postComment(data) {
-    fetch(commentsURL, {
+    return fetch(commentsURL, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -109,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(data)
     })
+    .then(res => res.json())
   }
   //Delete Comment
   function deleteComment(data) {
