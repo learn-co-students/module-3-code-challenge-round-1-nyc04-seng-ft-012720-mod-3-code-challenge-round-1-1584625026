@@ -23,14 +23,14 @@ const fetchLikes = (image) => {
     .then(response => response.json())
 }
 
-const fetchComments = (commentLi,image) => {
+const fetchComments = (comment,image) => {
     fetch(commentsURL, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({image_id: image.id, content: commentLi.textContent})
+        body: JSON.stringify({image_id: image.id, content: comment})
     })
     .then(response => response.json())
 }
@@ -42,7 +42,7 @@ fetchImage()
 
 // RENDER IMAGE
 const renderImage = (image) => {
-    imageCard.innerHTML = `        
+    imageCard.innerHTML = `
     <img src="${image.url}" id="image" data-id="${image.id}"/>
     <h4 id="name">${image.name}</h4>
     <span>Likes:
@@ -56,7 +56,7 @@ const renderImage = (image) => {
     <ul id="comments">
     </ul>
     `
-    image.comments.forEach(renderImageComment)
+    image.comments.forEach(renderComment)
 
     // EVENT LISTENERS
     document.getElementById("like_button").addEventListener("click", () => {
@@ -70,11 +70,11 @@ const renderImage = (image) => {
 
 // RENDER HELPERS
 // displays comments when loading page
-const renderImageComment = (commentData) => {
+const renderComment = (commentData) => {
     const commentsUl = document.getElementById("comments")
-    const newCommentLi = document.createElement("li")
-    newCommentLi.innerText = commentData.content
-    commentsUl.append(newCommentLi)
+    const commentLi = document.createElement("li")
+    commentLi.innerText = commentData.content
+    commentsUl.append(commentLi)
 }
 
 const renderLike = (image) => {
@@ -87,10 +87,12 @@ const renderLike = (image) => {
 const renderCommentForm = (event, image) => {
     event.preventDefault()
     const form = event.target
-    const commentsUl = document.getElementById("comments")
-    const commentLi = document.createElement("li")
-    commentLi.textContent = form["comment"].value
-    commentsUl.append(commentLi)
-    fetchComments(commentLi, image)
+    const commentContent = form["comment"].value
+    const newComment = {
+        image_id: image.id,
+        content: commentContent
+    }
+    renderComment(newComment)
+    fetchComments(commentContent, image)
     form.reset()
 }
