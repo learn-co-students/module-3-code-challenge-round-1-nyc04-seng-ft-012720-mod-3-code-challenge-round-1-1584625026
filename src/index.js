@@ -5,15 +5,42 @@ const likeURL = `https://randopic.herokuapp.com/likes/`
 const commentsURL = `https://randopic.herokuapp.com/comments/`
 const imageCard = document.getElementById("image_card")
 
-// Step 1 - Get the Image Data
+// FETCHERS
 const fetchImage = () => {
     return fetch(imageURL)
         .then(response => response.json())
 }
 
+const fetchLikes = (image) => {
+    fetch(likeURL, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+            body: JSON.stringify({image_id: image.id})
+    })
+    .then(response => response.json())
+}
+
+const fetchComments = (commentLi,image) => {
+    fetch(commentsURL, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({image_id: image.id, content: commentLi.textContent})
+    })
+    .then(response => response.json())
+}
+
+
+// INITIAL FETCH
 fetchImage()
     .then(imageData => renderImage(imageData))
 
+// RENDER IMAGE
 const renderImage = (image) => {
     imageCard.innerHTML = `        
     <img src="${image.url}" id="image" data-id="${image.id}"/>
@@ -66,29 +93,4 @@ const renderCommentForm = (event, image) => {
     commentsUl.append(commentLi)
     fetchComments(commentLi, image)
     form.reset()
-}
-
-// FETCHERS
-const fetchLikes = (image) => {
-    fetch(likeURL, {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-            body: JSON.stringify({image_id: image.id})
-    })
-    .then(response => response.json())
-}
-
-const fetchComments = (commentLi,image) => {
-    fetch(commentsURL, {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({image_id: image.id, content: commentLi.textContent})
-    })
-    .then(response => response.json())
 }
