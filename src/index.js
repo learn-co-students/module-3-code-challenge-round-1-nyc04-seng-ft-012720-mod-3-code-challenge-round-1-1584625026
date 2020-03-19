@@ -1,4 +1,4 @@
-// document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   console.log('%c DOM Content Loaded and Parsed!', 'color: magenta')
 
   let imageId = 4863 //Enter the id from the fetched image here
@@ -12,10 +12,8 @@
   //DOM Elements
   const imageCard = document.querySelector('#image_card')
   
-
-
   //Event Listeners
-
+  document.addEventListener("submit", handleSubmit)
 
   function handleLike() {
     const likesCount = imageCard.querySelector("#likes")
@@ -25,6 +23,19 @@
     postLike(dataForLike)
   }
 
+  function handleSubmit(e) {
+    e.preventDefault()
+    const form = e.target
+    comContent = form.comment_input.value
+    comImage = imageCard.childNodes[1].dataset.id
+    const newComObj = {
+      content: comContent,
+      image_id: comImage
+    }
+    renderComment(newComObj)
+    postComment(newComObj)
+    form.reset()
+  }
   //Render Image
   function renderImage(imageObj) {
     // const image = imageCard.querySelector("img")
@@ -60,12 +71,12 @@
 
   //Get Image
   function fetchImage() {
-    return fetch(`https://randopic.herokuapp.com/images/${imageId}`)
+    return fetch(imageURL)
     .then(res => res.json())
   }
   //Post Like
   function postLike(data) {
-    fetch(`https://randopic.herokuapp.com/likes/`, {
+    fetch(likeURL, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +85,18 @@
       body: JSON.stringify({image_id: (data)})
     })
   }
+  //Post Comment
+  function postComment(data) {
+    fetch(commentsURL, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+  }
 
   //Initialize and render
   fetchImage().then(renderImage)
-// })
+})
