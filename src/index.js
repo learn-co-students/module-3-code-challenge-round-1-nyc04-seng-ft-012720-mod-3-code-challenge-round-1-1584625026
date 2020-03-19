@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const imageURL = `https://randopic.herokuapp.com/images/${imageId}`
   const likeURL = `https://randopic.herokuapp.com/likes/`
   const commentsURL = `https://randopic.herokuapp.com/comments/`
+
 //  --- GETTING REQUIRED PAGE ELEMENTS    SETTING ANY VARIABLES   ----- 
+
   const imageDiv = document.querySelector("#image_card")
   const imageTag = document.querySelector("#image")
   const imageName = document.querySelector("#name")
@@ -14,8 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const newCommentForm = document.querySelector("#comment_form")
   const outerUl = document.querySelector("#comments")
   let countLikes = 0
-
-
 
 //  --- INITIAL FETCH AND RENDERING   ----- 
 
@@ -55,26 +55,42 @@ document.addEventListener('DOMContentLoaded', () => {
                  image_id: imageTag.attributes[2].value,
                  content: newCommentForm["comment"].value
                 }
-          const commentLi = document.createElement("li")
-          commentLi.innerHTML = `
-                ${newComment.content} <button class="delete_btn">Delete Me</button>
-           `
-          outerUl.append(commentLi)
-          const deleteCommentBtn = commentLi.querySelector(".delete_btn")
-          deleteCommentBtn.addEventListener("click", (ev) => {
-                ev.target.parentElement.remove()
-        
-          })
-          newCommentForm.reset()
           fetch(`${commentsURL}`, {
-               method: 'POST', 
-               headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                   },
-               body: JSON.stringify(newComment)
+                method: 'POST', 
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                         },
+                body: JSON.stringify(newComment)})
+              .then(response => response.json())
+              .then(newCommentData => {
+                    const commentLi = document.createElement("li")
+                    commentLi.innerHTML = `
+                       ${newComment.content} <button id="${newCommentData.id}" class="delete_btn">Delete Me</button>
+                    ` 
+                    outerUl.append(commentLi)
+                    const deleteCommentBtn = commentLi.querySelector(".delete_btn")
+                    deleteCommentBtn.addEventListener("click", deleteComment)
+                    newCommentForm.reset()
           })
   })
 
+//   --------  DELETE FUNCTION  ------------
 
+  function deleteComment(ev) {
+        const badLi = ev.target.parentElement
+        const noGoodComment = ev.target.id
+        let errorMessage = "Something Went Very Wrong"
+        let customMessage = "Comment Successfully Destroyed"
+        fetch(`https://randopic.herokuapp.com/comments/${noGoodComment}`, {
+               method: 'DELETE'})
+              .then(response => {
+                    if (response.ok) {
+                        window.alert(`${customMessage}`)
+                        badLi.remove()
+                    } else {
+                        window.alert(`${errorMessage}`)
+                    }
+        })
+  }
 })

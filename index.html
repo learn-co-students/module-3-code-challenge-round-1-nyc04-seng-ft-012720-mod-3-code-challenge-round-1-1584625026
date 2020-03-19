@@ -18,7 +18,24 @@
       background-size: cover;
     }
     .banner {
-      position: center;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+  
+    .like_btn {
+      background-color: rgb(42, 170, 46);
+      border: none;
+      color: white;
+      padding: 8px 13px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 12px;
+    }
+    .delete_btn:hover {
+      background-color: rgb(58, 219, 131);
     }
     .delete_btn {
       background-color: rgb(226, 80, 75);
@@ -26,7 +43,7 @@
       color: white;
       padding: 8px 13px;
       text-align: center;
-      font-size: 10px;
+      font-size: 12px;
       cursor: pointer;
     }
     .delete_btn:hover {
@@ -45,7 +62,7 @@
           <span>Likes:
             <span id="likes">Likes Go Here</span>
           </span>
-          <button id="like_button">Like</button>
+          <button id="like_button" class="like_btn">Like</button>
           <form id="comment_form">
             <input id="comment_input" type="text" name="comment" placeholder="Add Comment"/>
             <input type="submit" value="Submit"/>
@@ -56,8 +73,8 @@
         </div>
       <div class="card col-md-4"></div>
     </div>
-    <img src="flatiron-school-logo.png" id="banner"/>
   </div>
+  <img src="flatiron-school-logo.png" id="banner"/>
   <script type="text/javascript" src='src/index.js' defer ></script>
   </body>
 </html>
