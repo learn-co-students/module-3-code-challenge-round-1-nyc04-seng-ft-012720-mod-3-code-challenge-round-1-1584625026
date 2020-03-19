@@ -66,16 +66,54 @@ document.addEventListener('DOMContentLoaded', () => {
   newCommnetForm.addEventListener('submit', e =>{
     e.preventDefault() 
 
-    const newComment = e.target.comments.value
+
+    const newComment = e.target.comment.value
     console.log(newComment)
 
+    newCommentObject = {
+      image_id: image.id,
+      conetent: newComment
+
+    }
+        //make a post request 
+
+    function postComment(newdata){
+      return fetch('https://randopic.herokuapp.com/comments',{
+        method: 'POST', 
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newdata),
+})
+      .then((response) => response.json())
+    }
+      postComment(newCommentObject)
+      
   })
+
+
+
+    // increase like
+  imagetag.addEventListener('click', e => {
+    if(e.target.tagName = "BUTTON"){
+      console.log(image.like_count)
+      
+      
+    }
+  })
+
+
+
+
+
   }
 
 
   fetch(imageURL)
     .then(res => res.json())
     .then(renderImage)
+
 
 
 
