@@ -48,14 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   commentForm.addEventListener("submit", handleCommentSubmission)
   function handleCommentSubmission(event){
-    event.preventDefault
+    event.preventDefault()
     const newComment = {
       content: event.target.comment_input.value,
       image_id: imageId
     }
-    // fetch(imageURL){
+    renderOneComment(newComment)
+    // fetch(imageURL, {
+    //   method: `POST`,
+    //   headers: 
 
-    // }
+    // })
+
+
+    // WORKING ON COMMENTS AT TIME OF FIRST COMMIT
   }
 
 })
