@@ -65,8 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentBox = imageCard.querySelector('#comments')
     //id,content,image_id,created_at,updated_at
     const newComment = document.createElement("li")
+    newComment.dataset.id = commentObj.id
     newComment.innerText = commentObj.content
+
+    deleteBtn = document.createElement("button")
+    deleteBtn.id = "delete_button"
+    deleteBtn.innerText = "X"
+    
+    newComment.append(deleteBtn)
     commentBox.append(newComment)
+    
+    deleteBtn.addEventListener("click", (e) => {
+      deleteComment(commentObj)
+      newComment.remove()
+    })
   }
 
   //Get Image
@@ -95,6 +107,19 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(data)
     })
+  }
+  //Delete Comment
+  function deleteComment(data) {
+    fetch(`https://randopic.herokuapp.com/comments/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(console.log)
   }
 
   //Initialize and render
