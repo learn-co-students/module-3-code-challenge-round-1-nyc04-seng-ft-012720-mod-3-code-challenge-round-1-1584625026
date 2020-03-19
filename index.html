@@ -11,6 +11,27 @@
     input {
       font-size: 2rem;
     }
+    body {
+      background-repeat: no-repeat, repeat;
+      background-color: #7f95c7;
+      background-position: center;
+      background-size: cover;
+    }
+    .banner {
+      position: center;
+    }
+    .delete_btn {
+      background-color: rgb(226, 80, 75);
+      border: none;
+      color: white;
+      padding: 8px 13px;
+      text-align: center;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .delete_btn:hover {
+      background-color: rgb(144, 5, 5);
+    }
   </style>
 </head>
 
@@ -35,7 +56,8 @@
         </div>
       <div class="card col-md-4"></div>
     </div>
+    <img src="flatiron-school-logo.png" id="banner"/>
   </div>
-  <script type="text/javascript" src='src/index.js'></script>
+  <script type="text/javascript" src='src/index.js' defer ></script>
   </body>
 </html>
