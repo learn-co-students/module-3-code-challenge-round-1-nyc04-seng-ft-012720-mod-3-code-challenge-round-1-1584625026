@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const likeBtn = document.querySelector("#like_button")
   const newCommentForm = document.querySelector("#comment_form")
   const outerUl = document.querySelector("#comments")
-  let countLikes = 0
 
 //  --- INITIAL FETCH AND RENDERING   ----- 
 
@@ -29,13 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
          imageName.textContent = `${imageData.name}`
          imageLikes.textContent = `${imageData.like_count}`
          imageDiv.append()
+         const commentList = imageData.comments
+         commentList.forEach((comment) => {
+                     renderComment(comment)
+         })
   })
 
 //  --- ADDING EVENT LISTENERS ON PAGE ELEMENTS   ----- 
 
   likeBtn.addEventListener("click", (ev) => {
-          countLikes++
-          imageLikes.textContent = `${countLikes}`
+          let currentLikes = imageLikes.textContent
+          currentLikes++
+          debugger
+          imageLikes.textContent = `${currentLikes}`
           const newLike = {
                     image_id: imageTag.attributes[2].value
                 }
@@ -63,17 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
                          },
                 body: JSON.stringify(newComment)})
               .then(response => response.json())
-              .then(newCommentData => {
-                    const commentLi = document.createElement("li")
-                    commentLi.innerHTML = `
-                       ${newComment.content} <button id="${newCommentData.id}" class="delete_btn">Delete Me</button>
-                    ` 
-                    outerUl.append(commentLi)
-                    const deleteCommentBtn = commentLi.querySelector(".delete_btn")
-                    deleteCommentBtn.addEventListener("click", deleteComment)
-                    newCommentForm.reset()
-          })
+              .then(newCommentData => renderComment(newCommentData))
+          newCommentForm.reset()
   })
+
+  function renderComment(comment) {
+    const commentLi = document.createElement("li")
+    commentLi.innerHTML = `
+       ${comment.content} <button id="${comment.id}" class="delete_btn">Delete Me</button>
+    ` 
+    outerUl.append(commentLi)
+    const deleteCommentBtn = commentLi.querySelector(".delete_btn")
+    deleteCommentBtn.addEventListener("click", deleteComment)
+  }
 
 //   --------  DELETE FUNCTION  ------------
 
@@ -91,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         window.alert(`${errorMessage}`)
                     }
-        })
+              })
   }
 })
